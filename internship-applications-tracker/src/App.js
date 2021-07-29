@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import JobList from './JobList';
+import Job from './Job';
 import { Button, FormControl, Input, InputLabel } from '@material-ui/core';
 import './App.css';
 import db from './Firebase'
+import Firebase from 'firebase'
 require('dotenv').config({path: '/.env'})
 
 
@@ -21,16 +22,19 @@ function App() {
 
   // Load database from Firebase
   useEffect(() => {
-    db.collection('jobList').onSnapshot(snapshot => {
-      console.log(snapshot.docs.map(doc => doc.data().Position));
-      setJobList(snapshot.docs.map(doc => doc.data().Position));
+    db.collection('jobList').orderBy('timestamp').onSnapshot(snapshot => {
+      console.log(snapshot.docs.map(doc => doc.data().position));
+      setJobList(snapshot.docs.map(doc => ({id: doc.id, position: doc.data().position})));
     })
   }, []);
 
   const addJob = (event) => {
     console.log('added');
     // Push input into jobList
-    setJobList([...jobList, input]);
+    db.collection('jobList').add({
+      position: input,
+      timestamp: Firebase.firestore.FieldValue.serverTimestamp()
+    })
     // Clears input box after submission
     setInput('');
   }
@@ -45,10 +49,10 @@ function App() {
       <Button disabled={!input} onClick={addJob} variant="contained" color="primary">
       Add
       </Button>
-
+      
       <ul>
-        {jobList.map(list => (
-          <JobList text={list}/>
+        {jobList.map(jobList => (
+          <Job job={jobList}/>
         ))}
       </ul>
 
