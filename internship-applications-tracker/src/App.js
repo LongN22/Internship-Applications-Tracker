@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import JobList from './JobList';
 import { Button, FormControl, Input, InputLabel } from '@material-ui/core';
 import './App.css';
+import db from './Firebase'
+require('dotenv').config({path: '/.env'})
 
 
-// npm install @material-ui/core
 
 function App() {
   /*  
@@ -16,6 +18,14 @@ function App() {
   const [jobList, setJobList] = useState([]);
   const [input, setInput] = useState('');
   console.log(input);
+
+  // Load database from Firebase
+  useEffect(() => {
+    db.collection('jobList').onSnapshot(snapshot => {
+      console.log(snapshot.docs.map(doc => doc.data().Position));
+      setJobList(snapshot.docs.map(doc => doc.data().Position));
+    })
+  }, []);
 
   const addJob = (event) => {
     console.log('added');
@@ -38,7 +48,7 @@ function App() {
 
       <ul>
         {jobList.map(list => (
-          <li>{list}</li>
+          <JobList text={list}/>
         ))}
       </ul>
 
