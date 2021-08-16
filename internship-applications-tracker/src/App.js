@@ -24,7 +24,7 @@ function App() {
   useEffect(() => {
     db.collection('jobList').orderBy('timestamp').onSnapshot(snapshot => {
       console.log(snapshot.docs.map(doc => doc.data().position));
-      setJobList(snapshot.docs.map(doc => ({id: doc.id, position: doc.data().position})));
+      setJobList(snapshot.docs.map(doc => ({id: doc.id, position: doc.data().position, status: doc.data().status})));
     })
   }, []);
 
@@ -33,7 +33,8 @@ function App() {
     // Push input into jobList
     db.collection('jobList').add({
       position: input,
-      timestamp: Firebase.firestore.FieldValue.serverTimestamp()
+      timestamp: Firebase.firestore.FieldValue.serverTimestamp(),
+      status: 'Applied'
     })
     // Clears input box after submission
     setInput('');
