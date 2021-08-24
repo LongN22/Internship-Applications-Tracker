@@ -21,6 +21,23 @@ import db from './Firebase';
 
 
 function Job(props) {
+    const updateStatus = (event) => {
+        if(props.job.status == 'Applied'){
+            db.collection('jobList').doc(props.job.id).update({
+                status: 'Accepted'
+            })
+        }
+        else if(props.job.status == 'Accepted'){
+            db.collection('jobList').doc(props.job.id).update({
+                status: 'Denied'
+            })
+        }
+        else{
+            db.collection('jobList').doc(props.job.id).update({
+                status: 'Accepted'
+            })
+        }
+    }
 
     return (
     <TableContainer component={Paper}>
@@ -29,6 +46,7 @@ function Job(props) {
                 <TableRow>
                     <TableCell>Position</TableCell>
                     <TableCell>Description</TableCell>
+                    <TableCell>Status</TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>
@@ -39,7 +57,11 @@ function Job(props) {
                     <TableCell style={{ maxWidth: 0}}>
                         {props.job.description}
                     </TableCell>
+                    <TableCell style={{ maxWidth: 0}}>
+                        {props.job.status}
+                    </TableCell>
                     <DeleteForeverIcon onClick={event => db.collection('jobList').doc(props.job.id).delete()}/>
+                    <DeleteForeverIcon onClick={updateStatus}/>
                 </TableRow>
             </TableBody>
         </Table>

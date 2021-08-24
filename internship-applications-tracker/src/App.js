@@ -50,8 +50,6 @@ function App() {
     setPay('');
     setCompany('');
   }
-
-
   
   return (
     <div className="App">
