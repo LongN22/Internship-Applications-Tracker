@@ -1,6 +1,7 @@
 import React from 'react'
-import { List, ListItem, ListItemText, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, DataGrid } from '@material-ui/core';
+import { List, ListItem, ListItemText, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Tooltip } from '@material-ui/core';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import UpdateIcon from '@material-ui/icons/Update';
 import db from './Firebase';
 
 // rfce: shortcut for creation
@@ -24,17 +25,17 @@ function Job(props) {
     const updateStatus = (event) => {
         if(props.job.status == 'Applied'){
             db.collection('jobList').doc(props.job.id).update({
-                status: 'Accepted'
+                status: 'Offer'
             })
         }
-        else if(props.job.status == 'Accepted'){
+        else if(props.job.status == 'Offer'){
             db.collection('jobList').doc(props.job.id).update({
-                status: 'Denied'
+                status: 'Rejected'
             })
         }
-        else{
+        else if(props.job.status == 'Rejected'){
             db.collection('jobList').doc(props.job.id).update({
-                status: 'Accepted'
+                status: 'Applied'
             })
         }
     }
@@ -47,6 +48,7 @@ function Job(props) {
                     <TableCell>Position</TableCell>
                     <TableCell>Description</TableCell>
                     <TableCell>Status</TableCell>
+                    <TableCell>Pay</TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>
@@ -60,8 +62,15 @@ function Job(props) {
                     <TableCell style={{ maxWidth: 0}}>
                         {props.job.status}
                     </TableCell>
-                    <DeleteForeverIcon onClick={event => db.collection('jobList').doc(props.job.id).delete()}/>
-                    <DeleteForeverIcon onClick={updateStatus}/>
+                    <TableCell style={{ maxWidth: 0}}>
+                        {props.job.pay}
+                    </TableCell>
+                    <Tooltip title='Delete'>
+                        <DeleteForeverIcon nClick={event => db.collection('jobList').doc(props.job.id).delete()}/>
+                    </Tooltip>
+                    <Tooltip title="Update Status">
+                        <UpdateIcon onClick={updateStatus}/>
+                    </Tooltip>
                 </TableRow>
             </TableBody>
         </Table>
