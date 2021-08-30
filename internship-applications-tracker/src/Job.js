@@ -46,6 +46,7 @@ function Job(props) {
             <TableHead>
                 <TableRow>
                     <TableCell>Position</TableCell>
+                    <TableCell>Company</TableCell>
                     <TableCell>Description</TableCell>
                     <TableCell>Status</TableCell>
                     <TableCell>Pay</TableCell>
@@ -53,20 +54,23 @@ function Job(props) {
             </TableHead>
             <TableBody>
                 <TableRow key={props.job.position}>
-                    <TableCell style={{ maxWidth: 0}}>
+                    <TableCell style={{ width: 250}}>
                         {props.job.position}
                     </TableCell>
-                    <TableCell style={{ maxWidth: 0}}>
+                    <TableCell style={{ width: 250}}>
+                        {props.job.company}
+                    </TableCell>
+                    <TableCell style={{ width: 400}}>
                         {props.job.description}
                     </TableCell>
-                    <TableCell style={{ maxWidth: 0}}>
+                    <TableCell style={{ width: 100}}>
                         {props.job.status}
                     </TableCell>
-                    <TableCell style={{ maxWidth: 0}}>
+                    <TableCell style={{ width: 100}}>
                         {props.job.pay}
                     </TableCell>
                     <Tooltip title='Delete'>
-                        <DeleteForeverIcon nClick={event => db.collection('jobList').doc(props.job.id).delete()}/>
+                        <DeleteForeverIcon onClick={event => db.collection('jobList').doc(props.job.id).delete()}/>
                     </Tooltip>
                     <Tooltip title="Update Status">
                         <UpdateIcon onClick={updateStatus}/>
